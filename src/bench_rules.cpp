@@ -6,7 +6,7 @@ namespace bench {
 float sum_aos(const std::vector<StructsForTest::ParticleAoS>& p) {
     float s = 0.f;
     for (const auto& q : p) {
-        s += q.x + q.y + q.z + q.vx + q.vy + q.vz;
+        s += (q.x + q.y + q.z) / (q.vx + q.vy + q.vz);
     }
     return s;
 }
@@ -22,7 +22,7 @@ float sum_soa(const StructsForTest::ParticlesSoA& p) {
         svy += p.vy[i];
         svz += p.vz[i];
     }
-    return (sx + sy +sz) + (svx + svy + svz);
+    return (sx + sy + sz) / (svx + svy + svz);
 }
 
 float sum_aos_x_only(const std::vector<StructsForTest::ParticleAoS>& p) {

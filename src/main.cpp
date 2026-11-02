@@ -21,13 +21,13 @@ std::uint64_t time_cycles(Fn&& fn, volatile float* sink, int repeats) {
 void report(const char* label, std::uint64_t cycles, int repeats, std::size_t n)
 {
     const double avg = double(cycles) / repeats;
-    std::printf("%-24s total %14llu cyc | avg %14.0f cyc | %.3f cyc/elem.\n", label, static_cast<unsigned long long>(cycles), avg, avg / double(n));
+    std::printf("%-4s total %4llu cyc | avg %4.0f cyc | %4.3f cyc/elem.\n", label, static_cast<unsigned long long>(cycles), avg, avg / double(n));
 }
 
 }
 
 int main() {
-    constexpr std::size_t N = 10'000'000;
+    constexpr std::size_t N = 100'000;
     constexpr int REPEATS = 20;
     constexpr int WARMUP = 3;
 

@@ -12,17 +12,15 @@ float sum_aos(const std::vector<StructsForTest::ParticleAoS>& p) {
 }
 
 float sum_soa(const StructsForTest::ParticlesSoA& p) {
-    float sx = 0.f, sy = 0.f, sz = 0.f, svx = 0.f, svy = 0.f, svz = 0.f;
+    float s = 0.f;
     const std::size_t n = p.size();
+    #pragma omp simd reduction(+:s)
     for (std::size_t i = 0; i < n; ++i) {
-        sx += p.x[i];
-        sy += p.y[i];
-        sz += p.z[i];
-        svx += p.vx[i];
-        svy += p.vy[i];
-        svz += p.vz[i];
+        float dist = p.x[i] + p.y[i] + p.z[i];
+        float speed = p.vx[i] + p.vy[i] + p.vz[i];
+        s += dist / speed;
     }
-    return (sx + sy + sz) / (svx + svy + svz);
+    return s;
 }
 
 float sum_aos_x_only(const std::vector<StructsForTest::ParticleAoS>& p) {

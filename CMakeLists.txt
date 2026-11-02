@@ -15,4 +15,4 @@ add_executable(aos_vs_soa src/main.cpp src/bench_rules.cpp)
 
 target_include_directories(aos_vs_soa PRIVATE src)
 
-target_compile_options(aos_vs_soa PRIVATE -O2 -ffast-math -Wall -Wextra -Wpedantic)
+target_compile_options(aos_vs_soa PRIVATE -O3 -march=native -ffast-math -Wall -Wextra -Wpedantic)

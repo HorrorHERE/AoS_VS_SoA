@@ -3,19 +3,23 @@
 #include <cstdio>
 #include <cstdint>
 #include <vector>
+#include <algorithm>
 
 namespace {
 template <typename Fn>
 std::uint64_t time_cycles(Fn&& fn, volatile float* sink, int repeats) {
-    std::uint64_t total = 0;
+    std::vector<std::uint64_t> times;
+    times.reserve(repeats);
     for (int r = 0; r < repeats; ++r) {
         const std::uint64_t t0 = bench::rdtsc_begin();
         const float result = fn();
         const std::uint64_t t1 = bench::rdtsc_end();
         *sink = result;
-        total += t1 - t0;
+        times.push_back(t1 - t0);
     }
-    return total;
+
+    std::sort(times.begin(), times.end());
+    return times[times.size() / 2]; 
 }
 
 void report(const char* label, std::uint64_t cycles, int repeats, std::size_t n)
@@ -27,8 +31,8 @@ void report(const char* label, std::uint64_t cycles, int repeats, std::size_t n)
 }
 
 int main() {
-    constexpr std::size_t N = 100'000;
-    constexpr int REPEATS = 20;
+    constexpr std::size_t N = 10'000'000;
+    constexpr int REPEATS = 100;
     constexpr int WARMUP = 3;
 
     std::printf("N = %zu, repeats = %d, warmup = %d\n\n", N, REPEATS, WARMUP);
